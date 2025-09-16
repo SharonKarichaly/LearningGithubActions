@@ -114,7 +114,7 @@ pipeline {
         stage("trivy vulnerability scan"){
             steps{
                 script {
-                    #trivyScan.vulnerability("ikramulhaq6363/solar-system:$GIT_COMMIT")
+                    // #trivyScan.vulnerability("ikramulhaq6363/solar-system:$GIT_COMMIT")
                     trivyScanScript.vulnerability(imageName:"ikramulhaq6363/solar-system:$GIT_COMMIT", severity:"LOW", exitCode:0)
                     trivyScanScript.vulnerability(imageName:"ikramulhaq6363/solar-system:$GIT_COMMIT", severity:"MEDIUM", exitCode:0)
                     trivyScanScript.vulnerability(imageName:"ikramulhaq6363/solar-system:$GIT_COMMIT", severity:"HIGH", exitCode:0)

@@ -107,9 +107,6 @@ pipeline {
         //     }
         // }
         stage("build Docker Image"){
-            when {
-                branch 'Feature_Branch'
-            }
             steps{
                 sh 'docker build -t ikramulhaq6363/solar-system:$GIT_COMMIT .'
             }

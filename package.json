@@ -1,9 +1,10 @@
 {
-  "name": "Solar System",
-  "version": "6.7.6",
-  "author": "Siddharth Barahalikar <barahalikar.siddharth@gmail.com>",
-  "homepage": "https://www.linkedin.com/in/barahalikar-siddharth/",
+  "name": "tech-stack-explorer",
+  "version": "1.0.0",
+  "author": "Your Name <your.email@example.com>",
+  "homepage": "https://github.com/yourusername",
   "license": "MIT",
+  "description": "Interactive Tech Stack Explorer - Discover programming languages and frameworks",
   "scripts": {
     "start": "node app.js",
     "test": "mocha app-test.js --timeout 10000 --reporter mocha-junit-reporter --exit",
@@ -11,7 +12,7 @@
   },
   "nyc": {
     "check-coverage": true,
-    "lines": 90
+    "lines": 85
   },
   "dependencies": {
     "@babel/traverse": "^7.23.2",

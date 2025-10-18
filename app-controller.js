@@ -1,67 +1,88 @@
-console.log('We are inside client.js');
+console.log('🚀 Tech Stack Explorer - Client Side Loaded');
 
-/* on page load  */
+/* Load pod information on page load */
 window.onload = function() {
-    const planet_id = document.getElementById("planetID").value
-    console.log("onLoad - Request Planet ID - " + planet_id)
+    console.log("Page loaded - Fetching pod information...");
 
     fetch("/os", {
-            method: "GET"
-        })
-        .then(function(res) {
-            if (res.ok) {
-                return res.json();
-            }
-            thrownewError('Request failed');
-        }).catch(function(error) {
-            console.log(error);
-        })
-        .then(function(data) {
-            document.getElementById('hostname').innerHTML = `Pod - ${data.os} `
-          //  document.getElementById('environment').innerHTML = ` Env - ${data.env}  `
-        });
+        method: "GET"
+    })
+    .then(function(res) {
+        if (res.ok) {
+            return res.json();
+        }
+        throw new Error('Request failed');
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+    .then(function(data) {
+        if (data) {
+            document.getElementById('podName').innerHTML = `Pod: ${data.os} | Environment: ${data.env || 'Development'}`;
+        }
+    });
 };
 
-
-
-const btn = document.getElementById('submit');
-if (btn) {
-    btn.addEventListener('click', func);
+/* Search button click handler */
+const searchBtn = document.getElementById('searchBtn');
+if (searchBtn) {
+    searchBtn.addEventListener('click', searchTechStack);
 }
 
-function func() {
-    const planet_id = document.getElementById("planetID").value
-    console.log("onClick Submit - Request Planet ID - " + planet_id)
+/* Allow Enter key to trigger search */
+const techInput = document.getElementById('techID');
+if (techInput) {
+    techInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            searchTechStack();
+        }
+    });
+}
 
-    fetch("/planet", {
-            method: "POST",
-            body: JSON.stringify({
-                id: document.getElementById("planetID").value
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        })
-        .then(function(res2) {
-            if (res2.ok) {
-                return res2.json();
-            }
-            thrownewError('Request failed.');
-        }).catch(function(error) {
-            alert("Ooops, We have 8 planets.\nSelect a number from 0 - 8")
-            console.log(error);
-        })
-        .then(function(data) {
-            document.getElementById('planetName').innerHTML = ` ${data.name} `
+function searchTechStack() {
+    const techID = document.getElementById("techID").value;
+    console.log("Searching for Tech Stack ID:", techID);
 
-            const element = document.getElementById("planetImage");
-            const image = ` ${data.image} `
-            element.style.backgroundImage  = "url("+image+")"
+    if (!techID || techID < 1 || techID > 9) {
+        alert("⚠️ Please enter a valid number between 1 and 9!\n\n1=Python | 2=JavaScript | 3=Java | 4=Go | 5=Rust\n6=TypeScript | 7=C++ | 8=Ruby | 9=PHP");
+        return;
+    }
 
-            const planet_description = ` ${data.description} `
-            document.getElementById('planetDescription').innerHTML = planet_description.replace(/(.{80})/g, "$1<br>");
+    fetch("/techstack", {
+        method: "POST",
+        body: JSON.stringify({
+            id: parseInt(techID)
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    .then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Tech stack not found');
+    })
+    .catch(function(error) {
+        alert("❌ Oops! We have 9 tech stacks available.\nPlease select a number from 1 to 9");
+        console.log(error);
+    })
+    .then(function(data) {
+        if (data) {
+            // Update UI with tech stack data
+            document.getElementById('techName').innerHTML = data.name;
+            document.getElementById('techCategory').innerHTML = data.category;
+            document.getElementById('techDescription').innerHTML = data.description;
+            document.getElementById('yearCreated').innerHTML = data.yearCreated;
+            document.getElementById('popularity').innerHTML = data.popularity;
+            document.getElementById('useCase').innerHTML = data.useCase;
+            
+            // Update logo
+            const logoElement = document.getElementById('techLogo');
+            logoElement.src = data.logo;
+            logoElement.alt = `${data.name} Logo`;
 
-          
-        });
-
+            console.log(`✅ Loaded: ${data.name}`);
+        }
+    });
 }

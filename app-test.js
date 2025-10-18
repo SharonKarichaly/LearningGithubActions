@@ -3,148 +3,160 @@ let server = require("./app");
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 
-
 // Assertion 
 chai.should();
 chai.use(chaiHttp); 
 
-describe('Planets API Suite', () => {
+describe('Tech Stack API Suite', () => {
 
-    describe('Fetching Planet Details', () => {
-        it('it should fetch a planet named Mercury', (done) => {
+    describe('Fetching Tech Stack Details', () => {
+        it('it should fetch Python details', (done) => {
             let payload = {
                 id: 1
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(1);
-                    res.body.should.have.property('name').eql('Mercury');
+                    res.body.should.have.property('name').eql('Python');
                 done();
               });
         });
 
-        it('it should fetch a planet named Venus', (done) => {
+        it('it should fetch JavaScript details', (done) => {
             let payload = {
                 id: 2
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(2);
-                    res.body.should.have.property('name').eql('Venus');
+                    res.body.should.have.property('name').eql('JavaScript');
                 done();
               });
         });
 
-        it('it should fetch a planet named Earth', (done) => {
+        it('it should fetch Java details', (done) => {
             let payload = {
                 id: 3
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(3);
-                    res.body.should.have.property('name').eql('Earth');
+                    res.body.should.have.property('name').eql('Java');
                 done();
               });
         });
-        it('it should fetch a planet named Mars', (done) => {
+
+        it('it should fetch Go details', (done) => {
             let payload = {
                 id: 4
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(4);
-                    res.body.should.have.property('name').eql('Mars');
+                    res.body.should.have.property('name').eql('Go (Golang)');
                 done();
               });
         });
 
-        it('it should fetch a planet named Jupiter', (done) => {
+        it('it should fetch Rust details', (done) => {
             let payload = {
                 id: 5
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(5);
-                    res.body.should.have.property('name').eql('Jupiter');
+                    res.body.should.have.property('name').eql('Rust');
                 done();
               });
         });
 
-        it('it should fetch a planet named Satrun', (done) => {
+        it('it should fetch TypeScript details', (done) => {
             let payload = {
                 id: 6
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(6);
-                    res.body.should.have.property('name').eql('Saturn');
+                    res.body.should.have.property('name').eql('TypeScript');
                 done();
               });
         });
 
-        it('it should fetch a planet named Uranus', (done) => {
+        it('it should fetch C++ details', (done) => {
             let payload = {
                 id: 7
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(7);
-                    res.body.should.have.property('name').eql('Uranus');
+                    res.body.should.have.property('name').eql('C++');
                 done();
               });
         });
 
-        it('it should fetch a planet named Neptune', (done) => {
+        it('it should fetch Ruby details', (done) => {
             let payload = {
                 id: 8
             }
           chai.request(server)
-              .post('/planet')
+              .post('/techstack')
               .send(payload)
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.property('id').eql(8);
-                    res.body.should.have.property('name').eql('Neptune');
+                    res.body.should.have.property('name').eql('Ruby');
                 done();
               });
         });
 
-        // it('it should fetch a planet named Pluto', (done) => {
-        //     let payload = {
-        //         id: 9
-        //     }
-        //   chai.request(server)
-        //       .post('/planet')
-        //       .send(payload)
-        //       .end((err, res) => {
-        //             res.should.have.status(200);
-        //             res.body.should.have.property('id').eql(9);
-        //             res.body.should.have.property('name').eql('Sun');
-        //         done();
-        //       });
-        // });
+        it('it should fetch PHP details', (done) => {
+            let payload = {
+                id: 9
+            }
+          chai.request(server)
+              .post('/techstack')
+              .send(payload)
+              .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('id').eql(9);
+                    res.body.should.have.property('name').eql('PHP');
+                done();
+              });
+        });
 
+        it('it should return 404 for invalid tech stack ID', (done) => {
+            let payload = {
+                id: 999
+            }
+          chai.request(server)
+              .post('/techstack')
+              .send(payload)
+              .end((err, res) => {
+                    res.should.have.status(404);
+                done();
+              });
+        });
 
     });        
 });

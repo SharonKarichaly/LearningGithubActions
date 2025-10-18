@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const OS = require('os');
@@ -13,9 +14,7 @@ app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI, {
     user: process.env.MONGO_USERNAME,
-    pass: process.env.MONGO_PASSWORD,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    pass: process.env.MONGO_PASSWORD
 }).then(() => {
     console.log("✅ MongoDB Connection Successful");
 }).catch(err => {
@@ -24,28 +23,30 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const Schema = mongoose.Schema;
 
-const dataSchema = new Schema({
+const techStackSchema = new Schema({
     name: String,
     id: Number,
     description: String,
-    image: String,
-    velocity: String,
-    distance: String
+    logo: String,
+    category: String,
+    yearCreated: String,
+    popularity: String,
+    useCase: String
 });
-const Planet = mongoose.model('planets', dataSchema);
+const TechStack = mongoose.model('techstacks', techStackSchema);
 
-// 🔥 FIXED: async/await instead of callback
-app.post('/planet', async (req, res) => {
+// API endpoint to get tech stack by ID
+app.post('/techstack', async (req, res) => {
     try {
-        const planetData = await Planet.findOne({ id: req.body.id });
+        const techData = await TechStack.findOne({ id: req.body.id });
 
-        if (!planetData) {
-            return res.status(404).json({ error: "Planet not found" });
+        if (!techData) {
+            return res.status(404).json({ error: "Tech stack not found" });
         }
 
-        res.json(planetData);
+        res.json(techData);
     } catch (err) {
-        console.error("Error fetching planet:", err);
+        console.error("Error fetching tech stack:", err);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -69,12 +70,17 @@ app.get('/ready', (req, res) => {
     res.json({ status: "ready" });
 });
 
-// Only start server if not running under tests
-// if (require.main === module) {
-//     app.listen(3000, () => {
-//         console.log("🚀 Server running on port 3000");
-//     });
-// }
+// Start server only when running directly (not during tests)
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Tech Stack Explorer running on http://localhost:${PORT}`);
+        console.log(`📖 Open your browser and visit: http://localhost:${PORT}`);
+    });
+}
 
-// module.exports = app;
+// Export for testing
+module.exports = app;
+
+// Export serverless handler for Lambda/serverless deployment
 module.exports.handler = serverless(app);

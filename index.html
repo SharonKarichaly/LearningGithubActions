@@ -1,107 +1,402 @@
-<html>
-   <head>
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Stack Explorer | Discover Programming Languages</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@900&family=Ubuntu&display=swap" rel="stylesheet">
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=BioRhyme&family=Encode+Sans:wght@900&family=Ubuntu&display=swap" rel="stylesheet">
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.6s ease-out;
+        }
 
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-      <meta name='viewport' content='width=device-width, initial-scale=1'>
-      <title>Solar System - Sid</title>
-      <link rel="icon" type="image/x-icon" href="https://gitlab.com/sidd-harth/solar-system/-/raw/main/images/saturn.png">
-      <style> 
-         #planetImage { 
-            background: url('https://gitlab.com/sidd-harth/solar-system/-/raw/main/images/solar-system.png')   center center; 
-            background-repeat: no-repeat;			   
-            background-size: cover; 
-            content: ''; 
-            position: static; 
-            animation: spin 25s linear infinite; 
-            width: 50vw; 
-            height: 50vw; 
-         } 
-         @keyframes spin { 
-             100% { transform: rotate(360deg); } 
-         } 
-         body { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: url('images/background.gif'); 
-         } 
-         /*.shadow { 
-         animation: rainbow 2s linear infinite; 
-         } */ 
-      </style>
-   </head>
-   <body>
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-      <div>
-        <div>
-         <a href="index.html">
-            <button
-               style=" font-size: 40px; 
-                   background: rgb(50,43,167);
-                   background: linear-gradient(90deg, rgba(50,43,167,1) 0%, rgba(82,41,124,1) 0%, rgba(137,26,205,1) 100%);
-                   color:white;
-                   font-family: 'Orbitron', sans-serif;
-                   border-radius: 25px;     
-                   border: 2px solid rgb(35, 34, 36);    
-                   width: 600px; 
-                   height: 70px;
-                   text-align: center;
-                   line-height: initial;
-                   border-width: 1px 1px 3px"> <i class="fa fa-rocket"></i> SOLAR <i class="fa fa-rocket"></i> SYSTEM 6.0 <i class="fa fa-rocket"></i> </button> 
-            </a>
-           
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .search-section {
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.2rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 16px 16px 50px;
+            font-size: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Fira Code', monospace;
+        }
+
+        input[type="number"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .tech-display {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 16px;
+            padding: 40px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-logo {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .tech-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .tech-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .tech-info {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            color: #1f2937;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .tech-description {
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .pod-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .pod-name {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .helper-text {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .tech-display {
+                padding: 24px;
+            }
+
+            .tech-logo {
+                width: 150px;
+                height: 150px;
+            }
+
+            .tech-name {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-code"></i>
+                Tech Stack Explorer
+                <i class="fas fa-laptop-code"></i>
+            </h1>
+            <p>Discover Popular Programming Languages & Frameworks</p>
         </div>
-        <br>
-         <input type="submit"  id="submit" value="Search the Planet" 
-         style="float: right;
-             background-color:rgb(187, 75, 243);
-             color:white;
-             font-family: 'Ubuntu';
-             border-radius: 25px;     
-             border: 2px solid #609;    
-             padding: 20px; 
-             width: 200px; 
-             text-align:center;" /> 
-         <div style="overflow: hidden; padding-right: .5em;" > 
-            <input type="number" id="planetID" name="number" 
-            style="width: 100%;
-            background-color:rgb(218, 204, 226);
-            text-align:center; 
-            border-radius: 25px;     
-            border: 2px solid #609;    
-            padding: 20px;" placeholder="Enter a number(0 - 8) to view the planets"/> 
-         </div>
-         <div class="middle">
-            <h1 style="color:rgb(247, 145, 95); font-family: 'Encode Sans';" id="planetName"> Solar System </h1>
-         </div>
-         <div class="bottomleft">
-            <p  style="color:rgb(224, 224, 224); font-family: 'Ubuntu';" id="planetDescription"> Solar system consists of our star, the Sun, and everything bound to it by gravity – <br> the planets Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune; <br> dwarf planets such as Pluto; dozens of moons; and millions <br> of asteroids, comets, and meteoroids.</p>
-         </div>
-         <br>
-         <div class="middle">
-            <h2 style="color:rgb(93, 150, 237); font-family: 'BioRhyme';"  id="hostname">Solar System Pod Name</h2>
 
-            <!-- <h3 style="color:rgb(111, 255, 171); font-family: 'Encode Sans';" id="environment">ENVIRONMENT: " placeholder "</h3> -->
-         </div>
-      </div>
-      <div  id="planetImage">  
-      </div>
-      <script type="text/javascript"  src="app-controller.js" charset="utf-8"></script>
-   </body>
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <i class="fas fa-search input-icon"></i>
+                    <input type="number" 
+                           id="techID" 
+                           placeholder="Enter ID (1-9) to explore a tech stack"
+                           min="1" 
+                           max="9">
+                </div>
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-rocket"></i>
+                    Explore
+                </button>
+            </div>
+            <p class="helper-text">
+                💡 Try: 1=Python | 2=JavaScript | 3=Java | 4=Go | 5=Rust | 6=TypeScript | 7=C++ | 8=Ruby | 9=PHP
+            </p>
+        </div>
+
+        <!-- Tech Display Area -->
+        <div class="tech-display">
+            <img id="techLogo" 
+                 src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" 
+                 alt="Tech Logo" 
+                 class="tech-logo">
+            
+            <h2 class="tech-name" id="techName">Tech Stack Explorer</h2>
+            <span class="tech-category" id="techCategory">Programming Languages & Frameworks</span>
+            
+            <div class="tech-info" id="techInfo">
+                <div class="info-row">
+                    <div class="info-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Year Created</div>
+                        <div class="info-value" id="yearCreated">Select a tech stack to explore</div>
+                    </div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-icon"><i class="fas fa-fire"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Popularity</div>
+                        <div class="info-value" id="popularity">-</div>
+                    </div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Primary Use Cases</div>
+                        <div class="info-value" id="useCase">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-description" id="techDescription">
+                Welcome to Tech Stack Explorer! Enter a number (1-9) above to discover details about popular programming languages and frameworks. Perfect for developers, students, and tech enthusiasts!
+            </div>
+
+            <!-- Pod Info -->
+            <div class="pod-info">
+                <i class="fas fa-server"></i>
+                <div class="pod-name" id="podName">Loading pod information...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app-controller.js"></script>
+</body>
 </html>

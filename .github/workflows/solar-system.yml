@@ -6,11 +6,19 @@ on:
     branches:
       - main
       - 'feature/*'
-    
+
+env:
+  MONGO_URI: mongo-url #hardcode mongo url here
+  MONGO_USERNAME: ${{ vars.MONGO_USERNAME }} #create mongo username variable in settings
+  MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }} # create mongo password as a secrets in settings
 jobs:
     unit-testing:
         name: Unit Testing
-        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            nodejs_version: [18, 19, 20]
+            operating_system: [ubuntu_latest, macos_latest]
+        runs-on: ${{matrix.operating_system}}
         steps:
         - name: Checkout Repository
           uses: actions/checkout@v4
@@ -18,7 +26,7 @@ jobs:
         - name: Setup Node.js environment
           uses: actions/setup-node@v6.2.0
           with:
-            node-version: 20
+            node-version: ${{matrix.nodejs_version}}
     
         - name: Install Dependencies
           run: npm install
@@ -26,8 +34,8 @@ jobs:
         - name: Unit Testing
           run: npm test
           
-        # - name: Archive Test Result
-        #   uses: actions/upload-artifact@v3
-        #   with:
-        #     name: Mocha-Test-Result
-        #     path: test-results.xml
+        - name: Archive Test Result
+          uses: actions/upload-artifact@v3
+          with:
+            name: Mocha-Test-Result
+            path: test-results.xml

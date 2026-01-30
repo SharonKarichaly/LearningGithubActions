@@ -130,6 +130,7 @@ jobs:
                 $ {{vars.DOCKER-USERNAME}}/solar-system:${{ github.sha}}  #tag the image and push to dockerhub
                 ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha}}  #tag the image and push to ghcr
     dev-deploy:
+      if: contains(github.ref, 'feature/')    #run this job if pushing it from the feature branches
       needs: docker
       environment:
         name: development
@@ -189,6 +190,7 @@ jobs:
             HOST=$(kubectl -n ${{ vars.NAMESPACE }} get ingress -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')
             echo "APP_INGRESS_URL=$HOST" >> "$GITHUB_OUTPUT"
     dev-integration-testing:
+      if: contains(github.ref, 'feature/')    #run this job if pushing it from the feature branches
       name: Dev Integration Testing
       needs: dev-deploy
       runs-on: ubuntu-latest
@@ -200,7 +202,8 @@ jobs:
             echo "Testing endpoint: https://$URL/live"
             curl https://$URL/live -s -k | jq -r .status | grep -iq live
     prod-deploy:
-      needs: dev-integration-testing
+      if: github.ref == 'refs/heads/main'   #run this job if pushing it from the main branch
+      needs: docker
       environment:
         name: production
         url: https://${{ steps.set-ingress-host-address.outputs.APP_INGRESS_URL }}
@@ -259,6 +262,7 @@ jobs:
             HOST=$(kubectl -n ${{ vars.NAMESPACE }} get ingress -o jsonpath='{.items[0].spec.tls[0].hosts[0]}')
             echo "APP_INGRESS_URL=$HOST" >> "$GITHUB_OUTPUT"
     prod-integration-testing:
+      if: github.ref == 'refs/heads/main'   #run this job if pushing it from the main branch
       name: Prod Integration Testing
       needs: prod-deploy
       runs-on: ubuntu-latest

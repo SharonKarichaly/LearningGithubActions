@@ -38,14 +38,10 @@ jobs:
           with:
             node-version: ${{matrix.nodejs_version}}
     
-        - name: cache dependency
-          uses: actions/cache@v5.0.2
+        - name: composite action - cache & install npm packages
+          uses: ./.github/workflows/custom-actions/npm-actions
           with: 
-            path: node_modules #folder where dependecies are added in the first run
-            key:  ${{ runner.os}}-node-modules-${{ hashFiles('package-lock.json') }} #unique key to create a cache and load the cache, here if package-lock.json file amended cache will get invalidated
-
-        - name: Install Dependencies
-          run: npm install
+            path-of-folder: node_modules
     
         - name: Unit Testing
           run: npm test
@@ -79,14 +75,10 @@ jobs:
         #   with:
         #     node-version: 18
 
-        - name: cache dependency
-          uses: actions/cache@v5.0.2
+        - name: composite action - cache & install npm packages
+          uses: ./.github/workflows/custom-actions/npm-actions
           with: 
-            path: node_modules #folder where dependecies are added in the first run
-            key:  ${{ runner.os}}-node-modules-${{ hashFiles('package-lock.json') }} #unique key to create a cache and load the cache, here if package-lock.json file amended cache will get invalidated
-    
-        - name: Install Dependencies
-          run: npm install
+            path-of-folder: node_modules
 
         - name: code coverage
           continue-on-error: true         #ensuring even if this step, fails, remaining steps will not skip
@@ -98,6 +90,46 @@ jobs:
             name: code_coverege_result
             path: coverage            #results used to save in coverage folder
             retention-days: 5            #artifact will get deleted after 5 days
+    reports-s3:
+      name: AWS S3 - Upload Reports
+      needs: [unit-testing, code-coverage]
+      runs-on: ubuntu-latest
+      continue-on-error: true
+      steps:
+        - name: Download Mocha Test Artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: Mocha-Test-Result
+
+
+        - name: Download Code Coverage Artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: Code-Coverage-Result
+
+
+        - name: Merge Test Files
+          run: |
+            echo "Listing workspace contents..."
+            ls -ltr
+            echo "Creating reports directory..."
+            mkdir reports-${{ github.sha }}
+            mv cobertura-coverage.xml reports-${{ github.sha }}/
+            mv test-results.xml       reports-${{ github.sha }}/
+            echo "Final contents:"
+            ls -ltr reports-${{ github.sha }}/
+
+        - name: Upload to AWS S3
+          uses: jakejarvis/s3-sync-action@v0.5.1
+          with:
+            args: --follow-symlinks --delete
+          env:
+            AWS_S3_BUCKET: solar-system-reports-bucket
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: us-east-1
+            SOURCE_DIR: reports-${{ github.sha }}
+            DEST_DIR: reports-${{ github.sha }}
     docker:
       name: docker-login
       needs: [unit-testing, code-coverage]
@@ -130,19 +162,17 @@ jobs:
                 $ {{vars.DOCKER-USERNAME}}/solar-system:${{ github.sha}}  #tag the image and push to dockerhub
                 ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha}}  #tag the image and push to ghcr
     dev-deploy:
-      if: contains(github.ref, 'feature/')    #run this job if pushing it from the feature branches
+      if: contains(github.ref, 'feature/') #run this job if pushing it from the feature branches
       needs: docker
-      uses: ./.github/workflows/reusing-deployment.yml
+      uses: .github/workflows/reusing-deployment.yml
       secrets:
-        k8s-kubeconfig: ${{secrets.KUBECONFIG}}
-        mongodb-pwd: ${{secrets.MONGO_PASSWORD}}
+        k8s_kubeconfig: ${{ secrets.KUBECONFIG }}
+        mongodb_pwd: ${{ secrets.MONGO_PASSWORD }}
       with:
-        mongodb-uri: ${{vars.MONGO_URI}}
+        mongodb_uri: ${{ vars.MONGO_URI }}
         environment: development
-        k8s-manifest-dir: relative path of dev env
-        kubectl-version: provide the rquired version
-
-
+        k8s_manifest_dir: kubernetes/development  # relative path of dev env
+        kubectl_version: v1.28.0  # provide the rquired version
     dev-integration-testing:
       if: contains(github.ref, 'feature/')    #run this job if pushing it from the feature branches
       name: Dev Integration Testing

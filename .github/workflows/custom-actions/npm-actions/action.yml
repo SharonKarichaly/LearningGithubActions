@@ -1,0 +1,18 @@
+name: 'NPM Custom Action'
+description: 'Cache and install Node.js packages'
+inputs:
+  path-of-folder:
+    description: 'Directory to cache (e.g., node_modules)'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Cache NPM dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ inputs.path-of-folder }}
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+
+    - name: Install Dependencies
+      run: npm install
+      shell: bash    # each run command in composite action, requires a shell
